@@ -1,0 +1,795 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="js," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="1. 介绍&amp;emsp;JavaScript与HTML之间的交互式通过事件实现的。事件就是文档或浏览器创楼中发生的一些特定的交互瞬间。只不过在当年还没有统一标准的时候，各浏览器厂商都制定了自己的标准，当我们编写代码时就要考虑不同浏览器之间的各种差异。&amp;emsp;事件流一班包括三个阶段：事件捕获阶段，处于目标阶段和事件冒泡阶段。所有现代浏览器都支持事件冒泡，但在具体实现上有一些差异，IE5.5及更早版">
+<meta name="keywords" content="js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="javascript事件在不同浏览器中的差异">
+<meta property="og:url" content="http://yoursite.com/2017/09/10/javascript事件在不同浏览器中的差异/index.html">
+<meta property="og:site_name" content="王炳楠的小窝">
+<meta property="og:description" content="1. 介绍&amp;emsp;JavaScript与HTML之间的交互式通过事件实现的。事件就是文档或浏览器创楼中发生的一些特定的交互瞬间。只不过在当年还没有统一标准的时候，各浏览器厂商都制定了自己的标准，当我们编写代码时就要考虑不同浏览器之间的各种差异。&amp;emsp;事件流一班包括三个阶段：事件捕获阶段，处于目标阶段和事件冒泡阶段。所有现代浏览器都支持事件冒泡，但在具体实现上有一些差异，IE5.5及更早版">
+<meta property="og:updated_time" content="2017-09-10T13:17:56.499Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="javascript事件在不同浏览器中的差异">
+<meta name="twitter:description" content="1. 介绍&amp;emsp;JavaScript与HTML之间的交互式通过事件实现的。事件就是文档或浏览器创楼中发生的一些特定的交互瞬间。只不过在当年还没有统一标准的时候，各浏览器厂商都制定了自己的标准，当我们编写代码时就要考虑不同浏览器之间的各种差异。&amp;emsp;事件流一班包括三个阶段：事件捕获阶段，处于目标阶段和事件冒泡阶段。所有现代浏览器都支持事件冒泡，但在具体实现上有一些差异，IE5.5及更早版">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/09/10/javascript事件在不同浏览器中的差异/"/>
+
+
+
+
+
+  <title>javascript事件在不同浏览器中的差异 | 王炳楠的小窝</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c9a8c0c322ea59884118fd00e0448d73";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">王炳楠的小窝</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-photo">
+          <a href="/photo" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-image"></i> <br />
+            
+            照片
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-life">
+          <a href="/life" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heart"></i> <br />
+            
+            生活
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/10/javascript事件在不同浏览器中的差异/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="王炳楠">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="王炳楠的小窝">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">javascript事件在不同浏览器中的差异</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-10T21:16:48+08:00">
+                2017-09-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>1. 介绍</strong><br>&emsp;JavaScript与HTML之间的交互式通过事件实现的。事件就是文档或浏览器创楼中发生的一些特定的交互瞬间。只不过在当年还没有统一标准的时候，各浏览器厂商都制定了自己的标准，当我们编写代码时就要考虑不同浏览器之间的各种差异。<br>&emsp;事件流一班包括三个阶段：事件捕获阶段，处于目标阶段和事件冒泡阶段。所有现代浏览器都支持事件冒泡，但在具体实现上有一些差异，IE5.5及更早版本中的事件冒泡会跳过<code>&lt;html&gt;</code>元素（从<code>&lt;body&gt;</code>直接跳到document），IE9，Firefox，Chorme，和Safari则将事件一直冒泡到window对象；老版本的浏览器不支持事件捕获。</p>
+<hr>
+<p><strong>2.添加事件的方法</strong><br>&emsp;我们通常是这样为某元素添加事件的：<br><code>var btn = document.getElementById(&quot;myBtn&quot;);
+btn.addEventListener(&quot;click&quot;,function(){
+//处理代码
+})</code></p>
+<p>&emsp;这样就能为id是myBtn的元素绑定一个click事件了。其实addEventListener有三个参数，只不过我们通常会省略第三个参数：<br>&emsp;第一个参数：添加事件类型，比如click，mouseover，mousemover等等，这里的事件类型没有on，不是”onclick”;<br>&emsp;第二个参数：事件处理函数，这里用来添加需要执行的代码；<br>&rmsp;在哪个阶段调用事件处理程序，布尔值。若为true，表示在捕获阶段处理；若为false则在冒泡阶段进行处理。默认为false。<br>&rmsp;而且如果我们用addEventListener为同一个元素添加多个相同事件时，事件会按照添加的顺序依次执行。</p>
+<hr>
+<p><strong>2.1事件对象event</strong><br>&rmsp;IE和其他浏览的event对象是不同的。在其他浏览器中若要使用时，都要传入event对象，而在IE中，event却是window对象的一个属性。<br><code>var btn = document.getElementById(&quot;myBtn&quot;);
+/* 非IE */
+btn.addEventListener(&quot;click&quot;, function(event){
+//处理代码
+alert(event.type);
+}) 
+/* IE */
+btn.attachEvent(&quot;onclick&quot;, function(){
+//处理代码
+var event = window.event;
+alert(&quot;event.type&quot;);
+})</code><br>&emps;不过在实际应用中,我们却不能把这两个并列地写，因为其中一个方法是某一个浏览器中肯定是没定义的，会报错。当我们却是要使用event对象时，我们可以这样写：<br><code>function(event){
+    //处理代码
+    event = event || window.event;
+    alert(event.type);
+}</code><br>这样就能保证event对象是必然存在可用的。</p>
+<hr>
+<p><strong>2.2 event中的属性方法</strong><br>&emps;不同浏览器的event存在的方法不同，而且各自的属性与方法也不尽相同。</p>
+<table>
+<thead>
+<tr>
+<th>属性/方法</th>
+<th>类型</th>
+<th>读/写</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bubbles</td>
+<td>boolean</td>
+<td>只读</td>
+<td>表明事件是否冒泡</td>
+</tr>
+<tr>
+<td>cancelable</td>
+<td>boolean</td>
+<td>只读</td>
+<td>是否可以取消事件的默认行为</td>
+</tr>
+<tr>
+<td>currentTarget</td>
+<td>Element</td>
+<td>只读</td>
+<td>其事件处理程序当前正在处理事件的那个元素</td>
+</tr>
+<tr>
+<td>eventPhase</td>
+<td>Integer</td>
+<td>只读</td>
+<td>调用事件处理程序的阶段：1捕获阶段，2处于目标，3冒泡阶段</td>
+</tr>
+<tr>
+<td>preventDefault()</td>
+<td>function</td>
+<td>只读</td>
+<td>取消事件的默认行为。只在cancelable为true时才可以使用该方法</td>
+</tr>
+<tr>
+<td>stopPropagation()</td>
+<td>Function</td>
+<td>只读</td>
+<td>取消事件的进一步捕获或冒泡。只在bubbles为true时才可以使用该方法</td>
+</tr>
+<tr>
+<td>target</td>
+<td>Element</td>
+<td>只读</td>
+<td>真正触发事件的那个元素</td>
+</tr>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>只读</td>
+<td>被触发事件的类型</td>
+</tr>
+</tbody>
+</table>
+<p>&emps;IE中的event属性/方法<br>| 属性/方法 | 类型 | 读/写 | 说明 |<br>|———–|—–|——|—-|<br>|cancelBubble|boolean|读/写|是否取消事件的进一步冒泡。为true时取消冒泡，默认为false|<br>|returnValue|boolean|读/写|是否取消事件的默认行为。为false时取消事件的默认行为，默认为true|<br>|scrElement|Element|只读|事件的目标|<br>|type|String|只读|被触发事件的类型|<br>&emps;我们从两个表格中能看出，虽然很多方法名称不一样，但最终目的都是一样的。<br>&emps;不过为了在各个浏览器之间的通用，我们可以这样写：<br><code>function(event){
+    //处理代码
+    event = event || window.event;
+    //取消事件的默认行为
+    if(event.preventDefault){
+        event.preventDefault();
+    }else{
+        event.returnValue = false;
+    }
+    //取消事件的进一步冒泡
+    if(event.stopPropagation){
+        event.stopPropagation();
+    } else {
+        event.cancelBubble = true;
+    }
+}</code></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js/" rel="tag"># js</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/05/图片懒加载/" rel="next" title="图片懒加载">
+                <i class="fa fa-chevron-left"></i> 图片懒加载
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="王炳楠" />
+          <p class="site-author-name" itemprop="name">王炳楠</p>
+           
+              <p class="site-description motion-element" itemprop="description">静而生慧 卓尔不凡</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">Artikel</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">Kategorien</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">Tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王炳楠</span>
+</div>
+
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
